@@ -1,24 +1,149 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatroom App</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat Room</title>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCu2LKq2WQbzhCtQIMHPqC8GMogKNkT3Zk",
+    authDomain: "chat-room-67e5f.firebaseapp.com",
+    projectId: "chat-room-67e5f",
+    storageBucket: "chat-room-67e5f.appspot.com",
+    messagingSenderId: "160429949171",
+    appId: "1:160429949171:web:8a0240dd888f4a48d43786"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  let username = "";
+  while(!username) {
+    username = prompt("Hva er ditt navn?");
+  }
+
+  const messageList = document.getElementById("messages");
+  const messageInput = document.getElementById("message-input");
+  const sendBtn = document.getElementById("send-btn");
+
+  async function sendMessage() {
+    const text = messageInput.value.trim();
+    if(text) {
+      await addDoc(collection(db, "messages"), {
+        name: username,
+        text: text,
+        timestamp: serverTimestamp()
+      });
+      messageInput.value = "";
+    }
+  }
+
+  sendBtn.addEventListener("click", sendMessage);
+
+  messageInput.addEventListener("keydown", (e) => {
+    if(e.key === "Enter") {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  const messagesQuery = query(collection(db, "messages"), orderBy("timestamp"));
+
+  onSnapshot(messagesQuery, (snapshot) => {
+    messageList.innerHTML = ""; // Tømmer for å unngå duplikater
+    snapshot.forEach(doc => {
+      const msg = doc.data();
+      const msgDiv = document.createElement("div");
+      msgDiv.classList.add("message");
+      msgDiv.classList.add(msg.name === username ? "my-message" : "other-message");
+      msgDiv.innerHTML = `<strong>${msg.name}:</strong> ${msg.text}`;
+      messageList.appendChild(msgDiv);
+    });
+    messageList.scrollTop = messageList.scrollHeight;
+  });
+</script>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .chat-container {
+    width: 400px;
+    max-width: 90%;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #e5ddd5;
+  }
+  .message {
+    padding: 10px 15px;
+    border-radius: 20px;
+    max-width: 70%;
+    word-wrap: break-word;
+  }
+  .my-message {
+    background: #0084ff;
+    color: #fff;
+    align-self: flex-end;
+  }
+  .other-message {
+    background: #f1f0f0;
+    align-self: flex-start;
+  }
+  .input-container {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background: #fff;
+  }
+  #message-input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    outline: none;
+  }
+  #send-btn {
+    margin-left: 10px;
+    padding: 0 20px;
+    border: none;
+    background: #0084ff;
+    color: white;
+    border-radius: 25px;
+    cursor: pointer;
+  }
+  #send-btn:hover {
+    background: #005bb5;
+  }
+</style>
 </head>
 <body>
-    <div class="chat-container">
-        <h2>Velkommen til Chatroom!</h2>
-        <div id="messages" class="messages"></div>
-        <input type="text" id="username" placeholder="Ditt navn">
-        <input type="text" id="messageInput" placeholder="Skriv en melding...">
-        <button id="sendBtn">Send</button>
+  <div class="chat-container">
+    <div id="messages"></div>
+    <div class="input-container">
+      <input type="text" id="message-input" placeholder="Skriv en melding...">
+      <button id="send-btn">Send</button>
     </div>
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-    <script src="script.js"></script>
+  </div>
 </body>
 </html>
 
