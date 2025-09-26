@@ -1,126 +1,24 @@
-<!doctype html>
-<html lang="nb">
+<!DOCTYPE html>
+<html lang="no">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Nordic Explore — MVP</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatroom App</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <h1 id="brand">Nordic Explore</h1>
-      <nav id="nav">
-        <button id="nav-home" class="nav-btn">Hjem</button>
-        <button id="nav-profile" class="nav-btn hidden">Min profil</button>
-        <button id="nav-login" class="nav-btn">Logg inn</button>
-        <button id="nav-logout" class="nav-btn hidden">Logg ut</button>
-      </nav>
+    <div class="chat-container">
+        <h2>Velkommen til Chatroom!</h2>
+        <div id="messages" class="messages"></div>
+        <input type="text" id="username" placeholder="Ditt navn">
+        <input type="text" id="messageInput" placeholder="Skriv en melding...">
+        <button id="sendBtn">Send</button>
     </div>
-  </header>
 
-  <main class="container" id="main">
-    <!-- START: Home / Trips list -->
-    <section id="home-view" class="view">
-      <div class="actions">
-        <button id="btn-add-trip" class="btn hidden">Legg til reise</button>
-        <input id="search" type="search" placeholder="Søk destinasjon eller tag" aria-label="Søk reiser">
-      </div>
-      <div id="trips-list" class="grid"></div>
-    </section>
-
-    <!-- START: Auth view (login/register) -->
-    <section id="auth-view" class="view hidden" aria-hidden="true">
-      <div class="card auth-card">
-        <h2 id="auth-title">Logg inn</h2>
-
-        <form id="login-form" class="form">
-          <label for="email">E-post</label>
-          <input id="email" type="email" required />
-          <label for="password">Passord</label>
-          <input id="password" type="password" required minlength="6" />
-          <div class="form-actions">
-            <button type="submit" class="btn">Logg inn</button>
-            <button id="show-register" type="button" class="btn alt">Registrer</button>
-          </div>
-          <div id="auth-error" class="error" role="alert" aria-live="assertive"></div>
-        </form>
-
-        <form id="register-form" class="form hidden" aria-hidden="true">
-          <label for="reg-name">Navn</label>
-          <input id="reg-name" type="text" required />
-          <label for="reg-email">E-post</label>
-          <input id="reg-email" type="email" required />
-          <label for="reg-password">Passord</label>
-          <input id="reg-password" type="password" required minlength="6" />
-          <label for="reg-interests">Interesser (komma separert)</label>
-          <input id="reg-interests" type="text" placeholder="f.eks. natur,mat,kultur" />
-          <div class="form-actions">
-            <button type="submit" class="btn">Opprett konto</button>
-            <button id="show-login" type="button" class="btn alt">Tilbake</button>
-          </div>
-          <div id="reg-error" class="error" role="alert" aria-live="assertive"></div>
-        </form>
-      </div>
-    </section>
-
-    <!-- Profile view -->
-    <section id="profile-view" class="view hidden" aria-hidden="true">
-      <div class="card">
-        <h2>Min profil</h2>
-        <form id="profile-form" class="form">
-          <label for="pf-name">Navn</label>
-          <input id="pf-name" type="text" />
-          <label for="pf-email">E-post (kan ikke endres her)</label>
-          <input id="pf-email" type="email" disabled />
-          <label for="pf-interests">Interesser (komma separert)</label>
-          <input id="pf-interests" type="text" />
-          <label for="pf-photo">Profilbilde</label>
-          <input id="pf-photo" type="file" accept="image/*" />
-          <div class="form-actions">
-            <button id="save-profile" type="button" class="btn">Lagre</button>
-            <button id="delete-account" type="button" class="btn alt">Slett favoritter</button>
-          </div>
-          <div id="profile-msg" class="info" role="status" aria-live="polite"></div>
-        </form>
-        <h3>Mine favoritter</h3>
-        <div id="my-favorites" class="grid"></div>
-      </div>
-    </section>
-
-    <!-- Add trip modal / view (for admin or dev) -->
-    <section id="add-trip-view" class="view hidden" aria-hidden="true">
-      <div class="card">
-        <h2>Legg til reise</h2>
-        <form id="add-trip-form" class="form">
-          <label for="trip-title">Destinasjon</label>
-          <input id="trip-title" type="text" required />
-          <label for="trip-price">Pris (nkr)</label>
-          <input id="trip-price" type="number" required />
-          <label for="trip-tags">Tags (komma separert)</label>
-          <input id="trip-tags" type="text" />
-          <label for="trip-image">Bilde</label>
-          <input id="trip-image" type="file" accept="image/*" />
-          <label for="trip-desc">Beskrivelse</label>
-          <textarea id="trip-desc" rows="4"></textarea>
-          <div class="form-actions">
-            <button type="submit" class="btn">Publiser</button>
-            <button id="cancel-add" type="button" class="btn alt">Avbryt</button>
-          </div>
-          <div id="add-trip-msg" class="info" aria-live="polite"></div>
-        </form>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="site-footer">
-    <div class="container">
-      <p>Nordic Explore — MVP • Universell utforming • Demo</p>
-    </div>
-  </footer>
-
-  <!-- Firebase + app script as module -->
-  <script type="module" src="app.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
+
