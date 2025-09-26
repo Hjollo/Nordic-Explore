@@ -1,0 +1,39 @@
+:root{
+  --max-w: 1100px;
+  --accent: #2b6cb0;
+  --muted: #666;
+  --bg: #f6f8fb;
+}
+*{box-sizing:border-box}
+body{
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  margin:0; background:var(--bg); color:#222; line-height:1.4;
+}
+.container{max-width:var(--max-w);margin:0 auto;padding:1rem;}
+.site-header{background:white;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem}
+#brand{margin:0;font-size:1.25rem}
+.nav-btn{background:none;border:1px solid transparent;padding:0.45rem 0.7rem;border-radius:6px;cursor:pointer}
+.nav-btn:hover{background:#eef3fb}
+.hidden{display:none !important}
+.view{padding:1rem 0}
+.card{background:#fff;border-radius:10px;padding:1rem;margin:1rem 0;box-shadow:0 4px 18px rgba(0,0,0,0.06)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.trip-card{display:flex;flex-direction:column;border-radius:8px;overflow:hidden;background:white;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.trip-card img{width:100%;height:150px;object-fit:cover}
+.trip-body{padding:0.75rem;flex:1;display:flex;flex-direction:column;gap:0.5rem}
+.trip-actions{margin-top:auto;display:flex;gap:0.5rem;align-items:center}
+.btn{background:var(--accent);color:#fff;border:none;padding:0.6rem 0.9rem;border-radius:8px;cursor:pointer}
+.btn.alt{background:#fff;color:var(--accent);border:1px solid var(--accent)}
+.form{display:flex;flex-direction:column;gap:0.5rem}
+.form input[type="text"], .form input[type="email"], .form input[type="password"], .form textarea, .form input[type="number"], .form input[type="search"]{
+  padding:0.5rem;border:1px solid #ddd;border-radius:6px;font-size:1rem;
+}
+.form-actions{display:flex;gap:0.5rem;margin-top:0.5rem}
+.error{color:#b33;margin-top:0.25rem}
+.info{color:#2b6cb0;margin-top:0.25rem}
+.actions{display:flex;gap:0.5rem;align-items:center;justify-content:space-between;margin-bottom:0.75rem}
+@media (max-width:600px){
+  .header-inner{padding:0.5rem}
+  .trip-card img{height:120px}
+}
